@@ -14,6 +14,7 @@ struct ContentView: View {
     var selectPlatforms = ["Instagram", "Facebook", "TikTok", "YouTube"]
     @State private var selectedMode = 0
     @State var reportUserName: String = ""
+    @State var isShowingImagePicker = false
     
     var isValid: Bool {
         if reportUserName.isEmpty {
@@ -41,10 +42,13 @@ struct ContentView: View {
                 Section(header: Text("We strongly encourage you to share any photos that have violated your safety online.")) {
                     HStack {
                         Button(action: {
-                                self.attachPhotos()
-                            }) {
-                                Text("Attach Photos")
-                        }
+                            self.isShowingImagePicker.toggle()
+                        }, label: {
+                            Text("Attach Photos")
+                        })
+                            .sheet(isPresented: $isShowingImagePicker, content: {
+                        ImagePickerView()
+                    })
                     }.padding()
                 }
                 Section {
@@ -58,9 +62,34 @@ struct ContentView: View {
         }
     }
     func attachPhotos() {
-        
     }
     func submitReport() {
-        
+    }
+}
+
+struct ImagePickerView: UIViewControllerRepresentable {
+    
+    func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePickerView>) -> UIViewController {
+        let controller = UIImagePickerController()
+        return controller
+    }
+    
+    // this is the tricky part
+    
+    func updateUIViewController(_ uiViewController: ImagePickerView.UIViewControllerType, context: UIViewControllerRepresentableContext<ImagePickerView>) {
+    }
+}
+
+struct DummyView: UIViewRepresentable {
+    
+    func makeUIView(context: UIViewRepresentableContext<DummyView>) ->
+        UIButton {
+            let button = UIButton()
+            button.setTitle("DUMMY", for: .normal)
+            button.backgroundColor = .red
+            return button
+    }
+    
+    func updateUIView(_ uiView: DummyView.UIViewType, context: UIViewRepresentableContext<DummyView>) {
     }
 }
