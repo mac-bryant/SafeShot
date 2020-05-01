@@ -71,10 +71,23 @@ struct ImagePickerView: UIViewControllerRepresentable {
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePickerView>) -> UIViewController {
         let controller = UIImagePickerController()
+        controller.delegate = context.coordinator
         return controller
     }
     
+    func makeCoordinator() -> ImagePickerView.Coordinator {
+        return Coordinator()
+    }
+    
     // this is the tricky part
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let selectedImage = info[.originalImage] as? UIImage {
+                print(selectedImage)
+            }
+        }
+    }
     
     func updateUIViewController(_ uiViewController: ImagePickerView.UIViewControllerType, context: UIViewControllerRepresentableContext<ImagePickerView>) {
     }
